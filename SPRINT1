@@ -1,0 +1,38 @@
+import pandas as pd
+
+# Función ENTRADA
+def fn_registrar():
+    nombre = input("Ingrese el nombre del almacén: ")
+    descripcion = input("Ingrese la descripción del almacén: ")
+    direccion = input("Ingrese la dirección del almacén: ")
+    departamento = input("Ingrese el departamento del almacén: ")
+    
+    # Cargar el DataFrame existente o crear uno nuevo si no existe
+    try:
+        df = pd.read_csv('inventario.csv')
+    except FileNotFoundError:
+        df = pd.DataFrame(columns=['Nombre', 'Descripción', 'Dirección', 'Departamento'])
+    
+    # Agregar una nueva fila al DataFrame
+    nueva_entrada = pd.DataFrame([[nombre, descripcion, direccion, departamento]], columns=['Nombre', 'Descripción', 'Dirección', 'Departamento'])
+    df = df.append(nueva_entrada, ignore_index=True)
+    
+    # Guardar el DataFrame en un archivo CSV
+    df.to_csv('inventario.csv', index=False)
+    
+    print('Entrada registrada correctamente.')
+
+# Función SALIDA
+def fn_borrar(nombre):
+    # Cargar el DataFrame existente
+    df = pd.read_csv('inventario.csv')
+    df = df[df['Nombre'] != nombre]
+    df.to_csv('inventario.csv', index=False)
+    print('Almacén eliminado.')
+
+# Ejemplo de uso
+fn_registrar()
+print("Almacén agregado correctamente a la BD")
+fn_registrar()
+
+fn_borrar('almacén 1')
